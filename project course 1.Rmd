@@ -1,6 +1,6 @@
 ---
 title: "Reproducible research project1"
-output: md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -34,7 +34,9 @@ steps_per_day <- activity %>% group_by(date) %>%
 Make a histogram of the total number of steps taken each day
 
 ```{r}
+png("plot1.png")
 plot1=hist(steps_per_day$steps, breaks = 30, xlab = "Total steps by day", col = "pink", main = "Steps")
+dev.off()
 ```
 
 Calculate and report the mean and median of the total number of steps taken per day
@@ -49,10 +51,12 @@ median(steps_per_day$steps)
 Time series plo tof the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 ```{r}
+png("plot2.png")
 activity %>% group_by(time) %>% 
   summarise(mean=mean(steps, na.rm=T)) %>% ggplot()+
   geom_line(aes(x=time, y=mean), color="green")+
   labs(title = "mean steps per 5 minutes interval", x="time of the day", y="mean steps")
+dev.off()
 ```
 
 Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
@@ -90,7 +94,9 @@ Make a histogram of the total number of steps taken each day and Calculate and r
 ```{r}
 steps_per_day2 <- activity_filled %>% group_by(date) %>% 
   summarise(steps=sum(steps))
+png("plot3.png")
 plot2=hist(steps_per_day2$steps, breaks = 30, xlab = "Total steps by day", col = "turquoise", main = "Steps")
+dev.off()
 mean(steps_per_day2$steps)
 median(steps_per_day2$steps)
 ```
@@ -100,9 +106,11 @@ There is an increase in the mean and the median of daily steps when accounting f
 Also the center value of 10000 steps is much more frequent
 
 ```{r}
+png("plot4.png")
 par(mfrow=1:2)
 hist(steps_per_day$steps, breaks = 30, xlab = "Total steps by day", col = "pink", main = "Steps with NAs", ylim=c(0,15))
 hist(steps_per_day2$steps, breaks = 30, xlab = "Total steps by day", col = "turquoise", main = "Steps without NAs")
+dev.off()
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -120,11 +128,12 @@ activity_filled=activity_filled %>% mutate(week_days=weekdays(date)) %>%
 Make a panel plot containing a time series plot (i.e. \color{red}{\verb|type = "l"|}type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis)
 
 ```{r}
+png("plot5.png")
 activity_filled %>% group_by(weekend,time) %>% 
   summarise(mean=mean(steps)) %>% ggplot()+
   facet_grid(weekend~.)+
   geom_line(aes(x=time, y=mean), col="violet", lwd=1.2)+
   labs(title = "mean steps per 5 minutes interval", x="time of the day", y="mean steps")
-
+dev.off()
 ```
 
